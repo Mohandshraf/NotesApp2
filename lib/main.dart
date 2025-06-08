@@ -2,13 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:device_preview/device_preview.dart';
 import 'package:hive_flutter/adapters.dart';
 import 'package:notesapp/constants.dart';
+import 'package:notesapp/models/note_model.dart';
 import 'package:notesapp/views/notes_view.dart';
 
 void main() async {
   await Hive.initFlutter();
- await  Hive.openBox(kNotesBox); 
-  
+  await Hive.openBox(kNotesBox);
 
+  Hive.registerAdapter(NoteModelAdapter());
   runApp(
     DevicePreview(
       enabled: true, // خليها false لو عايز تشغلها بس في debug
