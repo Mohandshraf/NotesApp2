@@ -9,11 +9,12 @@ import 'package:notesapp/views/notes_view.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 void main() async {
-  Bloc.observer = SimpleBlocObserver(); // هنا بنحدد ال observer الخاص بالبلوك
+  Bloc.observer = SimpleBlocObserver();
+  Hive.registerAdapter(NoteModelAdapter());
+
   await Hive.initFlutter();
   await Hive.openBox(kNotesBox);
 
-  Hive.registerAdapter(NoteModelAdapter());
   runApp(
     DevicePreview(
       enabled: true, // خليها false لو عايز تشغلها بس في debug
@@ -28,21 +29,18 @@ class NotesApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return MultiBlocProvider(
-      providers: [BlocProvider(create: (context) => AddNoteCubit())],
-      child: MaterialApp(
-        debugShowCheckedModeBanner: false,
-        locale: DevicePreview.locale(
-          context,
-        ), // يخلي اللغات تتغير حسب الجهاز المختار
-        builder:
-            DevicePreview.appBuilder, // يبني الواجهة من خلال device_preview
-        theme: ThemeData(
-          scaffoldBackgroundColor: const Color.fromARGB(255, 41, 38, 38),
-        ),
-
-        home: NotesView(),
+    return MaterialApp(
+      debugShowCheckedModeBanner: false,
+      locale: DevicePreview.locale(
+        context,
+      ), // يخلي اللغات تتغير حسب الجهاز المختار
+      builder:
+          DevicePreview.appBuilder, // يبني الواجهة من خلال device_preview
+      theme: ThemeData(
+        scaffoldBackgroundColor: const Color.fromARGB(255, 41, 38, 38),
       ),
+    
+      home: NotesView(),
     );
   }
 }
